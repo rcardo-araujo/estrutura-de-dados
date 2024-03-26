@@ -1,9 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "../bibliotecas/arvore-binaria/TAB.h"
 
 TAB* vet2ab(int* vet, int n) {
     if(n <= 0) return NULL;
 
-    
+    return TAB_cria(vet[n/2],
+        vet2ab(vet, n/2),
+        vet2ab(&vet[(n/2) + 1], n - (n/2) - 1)
+    );
 }
 
 int main() {
@@ -17,7 +22,7 @@ int main() {
         vetor[i] = x;
     }
 
-    TAB* arv = TAB_incializa();
+    TAB* arv = TAB_inicializa();
     arv = vet2ab(vetor, n); 
 
     // imprimindo o vetor
@@ -25,7 +30,7 @@ int main() {
         printf("%d | ", vetor[i]);
     printf("\n");
     
-    // TAB_imprime(r);
+    TAB_imprime(0, arv);
 
     return 0;
 }

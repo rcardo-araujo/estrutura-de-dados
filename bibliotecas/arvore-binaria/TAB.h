@@ -7,3 +7,4 @@ typedef struct AB {
 TAB* TAB_inicializa();
 TAB* TAB_cria(int info, TAB* esq, TAB* dir);
 TAB* TAB_busca(int info, TAB* raiz);
+void TAB_imprime(int tab, TAB* raiz);

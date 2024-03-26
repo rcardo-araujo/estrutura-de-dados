@@ -23,3 +23,15 @@ TAB* TAB_busca(int info, TAB* raiz) {
     
     return (resp) ? resp : TAB_busca(info, raiz->dir);
 }
+
+void TAB_imprime(int tab, TAB* raiz) {
+    int i;
+    for(i = 0; i < tab; i ++)
+        printf("-");
+
+    if(raiz) {
+        printf("%d\n", raiz->info);
+        TAB_imprime(tab + 2, raiz->esq);
+        TAB_imprime(tab + 2, raiz->dir);
+    } else printf("NULL\n");
+}
