@@ -1,3 +1,6 @@
+#ifndef TAB_H
+#define TAB_H
+
 typedef struct AB {
     int info;
     struct AB* esq;
@@ -8,3 +11,7 @@ TAB* TAB_inicializa();
 TAB* TAB_cria(int info, TAB* esq, TAB* dir);
 TAB* TAB_busca(int info, TAB* raiz);
 void TAB_imprime(int tab, TAB* raiz);
+TAB* TAB_libera(TAB* raiz);
+int TAB_altura(TAB* raiz);
+
+#endif
