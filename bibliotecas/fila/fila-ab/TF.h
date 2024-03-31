@@ -1,4 +1,4 @@
-#ifndef TF_h
+#ifndef TF_H
 #define TF_H
 
 #include "..\..\arvore-binaria\TAB.h"
@@ -18,6 +18,6 @@ int TF_vazia(TF* fila);
 void TF_insere(TF* fila, struct AB* no);
 struct AB* TF_retira(TF* fila);
 void TF_libera(TF* fila);
-void TF_imprime(struct NOF* nof);
+void TF_imprime(TF* fila);
 
 #endif

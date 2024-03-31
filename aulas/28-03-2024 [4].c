@@ -8,8 +8,13 @@ void imprime_nivel(TAB* raiz) {
 
     TF* fila = TF_inicializa();
     TF_insere(fila, raiz);
-    TF_insere(fila, raiz->esq);
-    TF_imprime(fila->inicio);
+    while(!TF_vazia(fila)) {
+        struct AB* p = TF_retira(fila);
+        printf("%d - ", p->info);
+        if(p->esq) TF_insere(fila, p->esq);
+        if(p->dir) TF_insere(fila, p->dir);
+    }
+    TF_libera(fila);
 }
 
 int main(void) {
@@ -21,8 +26,6 @@ int main(void) {
         ),
         TAB_cria(5, NULL, NULL)
     );
-
-    TAB_imprime(0, arv);
 
     imprime_nivel(arv);
 
