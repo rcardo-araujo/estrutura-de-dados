@@ -61,15 +61,15 @@ TABB* TABB_busca(TABB* arv, int x) {
 }
 
 void TABB_imprime(TABB* arv, int tab) {
-    if(arv) {
-        int t;
-        for(t = 0; t < tab; t ++)
-            printf("-");
+    int t;
+    for(t = 0; t < tab; t ++)
+        printf("-");
         
-        printf(" %d", arv->info);
-        TABB_imprime(arv->esq, tab + 2);
-        TABB_imprime(arv->dir, tab + 2);
-    }
+    if(arv) {
+        printf(" %d\n", arv->info);
+        TABB_imprime(arv->esq, tab + 3);
+        TABB_imprime(arv->dir, tab + 3);
+    } else printf(" NULL\n");
 }
 
 int TABB_folha(TABB* no) {
