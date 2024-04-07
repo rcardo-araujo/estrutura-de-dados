@@ -25,32 +25,7 @@ TABB* TABB_insere(TABB* arv, int x) {
 }
 
 TABB* TABB_retira(TABB* arv, int x) {
-    if(!arv) return arv;
-
-    if(x != arv->info) {
-        if(x < arv->info) arv->esq = TABB_retira(arv->esq, x);
-        else arv->dir = TABB_retira(arv->dir, x);
-    } else {
-        if(TABB_folha(arv)) {
-            free(arv);
-            return NULL;
-        } else {
-            if(arv->esq && arv->dir) {
-                TABB* p = arv->esq;
-                while(p->dir) p = p->dir;
-                arv->info = p->info;
-                p->info = x;
-                arv->esq = TABB_retira(arv->esq, x); 
-            } else {
-                TABB* temp = arv;
-                if(arv->esq) arv = arv->esq;
-                else arv = arv->dir;
-                free(temp);
-            }
-        }
-    }
     
-    return arv;
 }
 
 TABB* TABB_busca(TABB* arv, int x) {
@@ -72,6 +47,6 @@ void TABB_imprime(TABB* arv, int tab) {
     } else printf(" NULL\n");
 }
 
-int TABB_folha(TABB* no) {
+static int TABB_folha(TABB* no) {
     return !(no->esq || no->dir);
 }

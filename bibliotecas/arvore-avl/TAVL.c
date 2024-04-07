@@ -6,8 +6,104 @@ TAVL* TAVL_inicializa(void) {
     return NULL;
 }
 
-TAVL* TAVL_insere(TAVL* arv, int x) {
+static int maior(int a, int b) {
+    if(a >= b) return a;
+    return b;
+}
+
+static int altura(TAVL* arv) {
+    if(!arv) return -1;
+
+    return arv->alt;
+}
+
+static int fb(TAVL* arv) {
+    if(!arv) return 0;
+
+    int fb = (altura(arv->dir) + 1) -
+            (altura(arv->esq) + 1);
     
+    return (fb >= 0) ? fb : (-fb);
+}
+
+static TAVL* rotacao_dir(TAVL* arv) {
+    TAVL* a = arv->esq;
+    arv->esq = a->dir;
+    a->dir = arv;
+
+    arv->alt = maior(
+        altura(arv->dir),
+        altura(arv->esq)) + 1;
+    
+    a->alt = maior(
+        altura(a->esq),
+        arv->alt) + 1;
+
+    return a;
+}
+
+static TAVL* rotacao_esq(TAVL* arv) {
+    TAVL* a = arv->dir;
+    arv->dir = a->esq;
+    a->esq = arv;
+
+    arv->alt = maior(
+        altura(arv->esq),
+        altura(arv->dir)) +1;
+    
+    a->alt = maior(
+        altura(a->dir),
+        arv->alt) + 1;
+
+    return a;
+}
+
+static TAVL* rotacao_esq_dir(TAVL* arv) {
+    arv->esq = rotacao_esq(arv->esq);
+    arv = rotacao_dir(arv);
+    return arv;
+}
+
+static TAVL* rotacao_dir_esq(TAVL* arv) {
+    arv->dir = rotacao_dir(arv->dir);
+    arv = rotacao_esq(arv);
+    return arv;
+}
+
+TAVL* TAVL_cria(int x) {
+    TAVL* novo = (TAVL*)malloc(sizeof(TAVL));
+    novo->info = x;
+    novo->alt = 0;
+    novo->esq = NULL;
+    novo->dir = NULL;
+
+    return novo;
+}
+
+TAVL* TAVL_insere(TAVL* arv, int x) {
+    if(!arv) return TAVL_cria(x);
+
+    if(x < arv->info) {
+        arv->esq = TAVL_insere(arv->esq, x);
+        if(fb(arv) >= 2) {
+            if(x < arv->esq->info) {
+                arv = rotacao_dir(arv);
+            } else arv = rotacao_esq_dir(arv);
+        }
+    } 
+    else if(x > arv->info) {
+        arv->dir = TAVL_insere(arv->dir, x);
+        if(fb(arv) >= 2) {
+            if(x > arv->dir->info) {
+                arv = rotacao_esq(arv);
+            } else arv = rotacao_dir_esq(arv);
+        }
+    }
+    arv->alt = maior(
+        altura(arv->esq),
+        altura(arv->dir)) + 1;
+
+    return arv;
 }
 
 TAVL* TAVL_busca(TAVL* arv, int x) {
@@ -34,18 +130,8 @@ void TAVL_imprime(TAVL* arv, int tab) {
     }
 
     if(arv) {
-        pritnf(" %d", arv->info);
+        printf(" %d\n", arv->info);
         TAVL_imprime(arv->esq, tab + 3);
         TAVL_imprime(arv->dir, tab + 3);
-    } else printf(" NULL");
-}
-
-int TAVL_altura(TAVL* arv) {
-    if(!arv) return -1;
-
-    int altura_esq = TAVL_altura(arv->esq);
-    int altura_dir = TAVL_altura(arv->dir);
-
-    return ((altura_esq >= altura_dir) ?
-            altura_esq : altura_dir) + 1;
+    } else printf(" NULL\n");
 }
