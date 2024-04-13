@@ -7,107 +7,102 @@ TAFG* TAFG_inicializa(void) {
     return NULL;
 }
 
-static struct Q* cria_q(void) {
-    float l;
-    printf("Insira o lado do quadrado: ");
-    scanf("%f", &l);
-
-    struct Q* novo = (struct Q*)malloc(sizeof(struct Q));
-    novo->l = l;
+static TQ* cria_quadrado(float* area) {
+    TQ* novo = (TQ *)malloc(sizeof(TQ));
+    printf("Quadrado:\n");
+    printf("l = ");
+    scanf(" %f", &(novo->l));
+    (*area) = (novo->l) * (novo->l);
     return novo;
 }
 
-static struct R* cria_r(void) {
-    float b, h;
-    printf("Insira a base e altura do retangulo: ");
-    scanf(" %f %f", &b, &h);
-
-    struct R* novo = (struct R*)malloc(sizeof(struct R));
-    novo->b = b;
-    novo->h = h;
+static TR* cria_retangulo(float* area) {
+    TR* novo = (TR *)malloc(sizeof(TR));
+    printf("Retangulo:\n");
+    printf("b, h = ");
+    scanf(" %f %f", &(novo->b), &(novo->h));
+    (*area) = novo->b * novo->h;
     return novo;
 }
 
-static struct TG* cria_tg(void) {
-    float b, h;
-    printf("Insira a base e altura do triangulo: ");
-    scanf(" %f %f", &b, &h);
-
-    struct TG* novo = (struct TG*)malloc(sizeof(struct TG));
-    novo->b = b;
-    novo->h = h;
+static TTG* cria_triangulo(float* area) {
+    TTG* novo = (TTG *)malloc(sizeof(TTG));
+    printf("Triangulo:\n");
+    printf("b, h = ");
+    scanf(" %f %f", &(novo->b), &(novo->h));
+    (*area) = (novo->b * novo->h) / 2;
     return novo;
 }
 
-static struct TP* cria_tp(void) {
-    float B, b, h;
-    printf("Insira a base maior, base menor e altura do trapezio: ");
-    scanf(" %f %f %f", &B, &b, &h);
-
-    struct TP* novo = (struct TP*)malloc(sizeof(struct TP));
-    novo->B = B;
-    novo->b = b;
-    novo->h = h;
+static TTP* cria_trapezio(float* area) {
+    TTP* novo = (TTP *)malloc(sizeof(TTP));
+    printf("Trapezio:\n");
+    printf("B, b, h = ");
+    scanf(" %f %f %f", &(novo->B), &(novo->b), &(novo->h));
+    (*area) = ((novo->B + novo->b) * novo->h) / 2;
     return novo;
 }
 
-TFG* TAFG_cria_fg(int tipo) {
-    TFG* fg = (TFG *)malloc(sizeof(TFG));
-
-    struct Q* q;
-    struct R* r;
-    struct TG* tg;
-    struct TP* tp;
+TFG* TAFG_cria_figura(int tipo) {
+    TFG* figura = (TFG *)malloc(sizeof(TFG));
+    float a;
     switch(tipo) {
         case 1:
-            fg->tipo = 1;
-            fg->figura = (void *)cria_q();
-            q = (struct Q*)fg->figura;
-            fg->area = q->l * q->l;
+            figura->info = (void *)cria_quadrado(&a);
+            figura->area = a;
+            figura->tipo = 1;
             break;
         case 2:
-            fg->tipo = 2;
-            fg->figura = (void *)cria_r();
-            r = (struct R*)fg->figura;
-            fg->area = r->b * r->h;
+            figura->info = (void *)cria_retangulo(&a);
+            figura->area = a;
+            figura->tipo = 2;
             break;
         case 3:
-            fg->tipo = 3;
-            fg->figura = (void *)cria_tg();
-            tg = (struct TG*)fg->figura;
-            fg->area = (tg->b * tg->h) / 2;
+            figura->info = (void *)cria_triangulo(&a);
+            figura->area = a;
+            figura->tipo = 3;
             break;
         case 4:
-            fg->tipo = 4;
-            fg->figura = (void *)cria_tp();
-            tp = (struct TP*)fg->figura;
-            fg->area = ((tp->B + tp->b) * tp->h) / 2;
-            break;
-        default:
+            figura->info = (void *)cria_trapezio(&a);
+            figura->area = a;
+            figura->tipo = 4;
             break;
     }
-    return fg;
+    return figura;
 }
 
-TAFG* TAFG_insere_arv(TAFG* arv, TAFG* no, float area) {
-    if(!arv) return no;
+TAFG* TAFG_insere(TAFG* arv, TFG* f) {
+    if(!arv) {
+        TAFG* nova_a = (TAFG *)malloc(sizeof(TAFG));
+        nova_a->figura = f;
+        nova_a->esq = NULL;
+        nova_a->dir = NULL;
+        return nova_a;
+    }
 
-    float area_arv = arv->figura->area;
-    if(area < area_arv) arv->esq = TAFG_insere_arv(arv, no, area);
-    else arv->dir = TAFG_insere_arv(arv, no, area);
-    
+    if(f->area < arv->figura->area) arv->esq = TAFG_insere(arv->esq, f);
+    else if(f->area > arv->figura->area) arv->dir = TAFG_insere(arv->dir, f);
     return arv;
 }
 
-TAFG* TAFG_insere(TAFG* arv, int tipo) {
-    TAFG* novo = (TAFG *)malloc(sizeof(TAFG));
-    novo->figura = TAFG_cria_fg(tipo);
-    novo->esq = NULL;
-    novo->dir = NULL;
+static void imprime_quadrado(TFG* f) {
+    TQ* q = (TQ *)f->info;
+    printf(" Lado = %.1f | Quadrado\n", q->l);
+}
 
-    float area = novo->figura->area;
+static void imprime_retangulo(TFG* f) {
+    TR* r = (TR *)f->info;
+    printf(" Base = %.1f, Altura = %.1f | Retangulo\n", r->b, r->h);
+}
 
-    return TAFG_insere_arv(arv, novo, area);
+static void imprime_triangulo(TFG* f) {
+    TTG* t = (TTG *)f->info;
+    printf(" Base = %.1f, Altura = %.1f | Triangulo\n", t->b, t->h);
+}
+
+static void imprime_trapezio(TFG* f) {
+    TTP* t = (TTP *)f->info;
+    printf(" Base maior = %.1f, Base menor = %.1f, Altura = %.1f | Trapezio\n", t->B, t->b, t->h);
 }
 
 void TAFG_imprime(TAFG* arv, int tab) {
@@ -115,37 +110,24 @@ void TAFG_imprime(TAFG* arv, int tab) {
     for(t = 0; t < tab; t ++) {
         printf("-");
     }
-    
-    if(arv) {
-        TAFG_imprime(arv->esq, tab + 3);
 
-        struct Q* q;
-        struct R* r;
-        struct TG* tg;
-        struct TP* tp;
-        int tipo = arv->figura->tipo;
-        switch(tipo) {
+    if(arv) {
+        printf("Area = %.1f |", arv->figura->area);
+        switch(arv->figura->tipo) {
             case 1:
-                q = (struct Q*)arv->figura->figura;
-                printf("Quadrado | Lado: %f | ", q->l);
+                imprime_quadrado(arv->figura);
                 break;
             case 2:
-                r = (struct R*)arv->figura->figura;
-                printf("Retangulo | Base, Altura: %f, %f | ", r->b, r->h);
+                imprime_retangulo(arv->figura);
                 break;
             case 3:
-                tg = (struct TG*)arv->figura->figura;
-                printf("Triangulo | Base, Altura: %f, %f | ", tg->b, tg->h);
+                imprime_triangulo(arv->figura);
                 break;
             case 4:
-                tp = (struct TP*)arv->figura->figura;
-                printf("Trapezio | Base maior, Base menor, Altura: %f, %f, %f | ", tp->B, tp->b, tp->h);
-                break;
-            default:
+                imprime_trapezio(arv->figura);
                 break;
         }
-        printf("Area: %f\n", arv->figura->area);
-        
+        TAFG_imprime(arv->esq, tab + 3);
         TAFG_imprime(arv->dir, tab + 3);
     } else printf("NULL\n");
 }

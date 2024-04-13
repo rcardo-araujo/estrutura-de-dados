@@ -76,11 +76,46 @@ int* menores_n(TABB* arv, int n) {
     return resp;
 }
 
+// f. auxiliar [04]
+// preenche um vetor
+void p_vet(TABB* arv, int* vet, int* pos, int n) {
+    if(!arv) return;
+
+    p_vet(arv->esq, vet, pos, n);
+    if(arv->info < n) vet[(*pos)] = arv->info;
+    (*pos) ++;
+    p_vet(arv->dir, vet, pos, n);
+    vet[(*pos)] = -1;
+}
+
+// f. auxiliar [04]
+// calcula quantidade de nós
+int num_nos(TABB* arv) {
+    if(!arv) return 0;
+
+    return 
+        num_nos(arv->esq) +
+        num_nos(arv->dir) + 1;
+}
+
+// 04 (alternativa)
+int* menores_n2(TABB* arv, int n) {
+    if(!arv) return NULL;
+
+    int n_nos = num_nos(arv);
+    int* resp = (int *)malloc(sizeof(int) * (n_nos + 1));
+    int pos = 0;
+
+    p_vet(arv, resp, &pos, n);
+
+    return resp;
+}
+
 int main(void) {
     TABB* arv = TABB_inicializa();
 
     int vet[] = {10, 5, 2, 6, 8, 7, 9, 15, 12, 17};
-    int i = 0;
+    int i = 0, cont = 0;
     for(i; i < 10; i ++) {
         arv = TABB_insere(arv, vet[i]);
     }
@@ -89,8 +124,8 @@ int main(void) {
 
     printf("Menor elemento da arvore: %d\n", menor_elem(arv)->info);
 
-    int* menores_q_n = menores_n(arv, 3);
-    printf("Elementos menores que 3: ");
+    int* menores_q_n = menores_n2(arv, 10);
+    printf("Elementos menores que 10: ");
     for(i = 0; i < tam_vetor(menores_q_n); i++)
         printf("%d ", menores_q_n[i]);
     printf("\n");

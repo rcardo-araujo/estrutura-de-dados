@@ -1,29 +1,29 @@
 #ifndef TFG_H
 #define TFG_H
 
-struct Q {
+typedef struct Q {
     float l;
-};
+} TQ;
 
-struct R {
+typedef struct R {
     float b;
     float h;
-};
+} TR;
 
-struct TG {
+typedef struct TG {
     float b;
     float h;
-};
+} TTG;typedef 
 
 struct TP {
     float B;
     float b;
     float h;
-};
+} TTP;
 
 typedef struct FG {
+    void* info;
     int tipo;
-    void* figura;
     float area;
 } TFG;
 
