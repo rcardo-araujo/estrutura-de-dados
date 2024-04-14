@@ -19,11 +19,10 @@ static int altura(TAVL* arv) {
 
 static int fb(TAVL* arv) {
     if(!arv) return 0;
-
-    int fb = (altura(arv->dir) + 1) -
-            (altura(arv->esq) + 1);
     
-    return (fb >= 0) ? fb : (-fb);
+    return 
+        (altura(arv->esq) + 1) -
+        (altura(arv->dir) + 1);
 }
 
 static TAVL* rotacao_dir(TAVL* arv) {
@@ -37,7 +36,7 @@ static TAVL* rotacao_dir(TAVL* arv) {
     
     a->alt = maior(
         altura(a->esq),
-        arv->alt) + 1;
+        altura(arv)) + 1;
 
     return a;
 }
@@ -53,7 +52,7 @@ static TAVL* rotacao_esq(TAVL* arv) {
     
     a->alt = maior(
         altura(a->dir),
-        arv->alt) + 1;
+        altura(arv)) + 1;
 
     return a;
 }
@@ -85,16 +84,16 @@ TAVL* TAVL_insere(TAVL* arv, int x) {
 
     if(x < arv->info) {
         arv->esq = TAVL_insere(arv->esq, x);
-        if(fb(arv) >= 2) {
-            if(x < arv->esq->info) {
+        if(fb(arv) == 2) {
+            if(fb(arv->esq) >= 0) {
                 arv = rotacao_dir(arv);
             } else arv = rotacao_esq_dir(arv);
         }
     } 
     else if(x > arv->info) {
         arv->dir = TAVL_insere(arv->dir, x);
-        if(fb(arv) >= 2) {
-            if(x > arv->dir->info) {
+        if(fb(arv) == -2) {
+            if(fb(arv->dir) <= 0) {
                 arv = rotacao_esq(arv);
             } else arv = rotacao_dir_esq(arv);
         }
@@ -102,6 +101,56 @@ TAVL* TAVL_insere(TAVL* arv, int x) {
     arv->alt = maior(
         altura(arv->esq),
         altura(arv->dir)) + 1;
+
+    return arv;
+}
+
+TAVL* TAVL_retira(TAVL* arv, int x) {
+    if(!arv) return arv;
+
+    if(x > arv->info) {
+        arv->dir = TAVL_retira(arv->dir, x);
+        if(fb(arv) == 2) {
+            if(fb(arv->esq) >= 0) {
+                arv = rotacao_dir(arv);
+            } else arv = rotacao_esq_dir(arv);
+        }
+    }
+    else if(x < arv->info) {
+        arv->esq = TAVL_retira(arv->esq, x);
+        if(fb(arv) == -2) {
+            if(fb(arv->dir) <= 0) {
+                arv = rotacao_esq(arv);
+            } else arv = rotacao_dir_esq(arv);
+        }
+    }
+    else {
+        if(arv->esq && arv->dir) {
+            TAVL* aux = arv->esq;
+            while(aux->dir) aux = aux->dir;
+            arv->info = aux->info;
+            aux->info = x;
+            arv->esq = TAVL_retira(arv->esq, x);
+
+            if(fb(arv) == -2) {
+                if(fb(arv->dir) <= 0) {
+                    arv = rotacao_esq(arv);
+                } arv = rotacao_dir_esq(arv);
+            }
+        } else {
+            TAVL* aux = arv;
+            if(!arv->esq && !arv->dir) arv = NULL;
+            else if(arv->esq) arv = arv->esq;
+            else arv = arv->dir;
+            free(aux);
+        }
+    }
+    
+    if(arv) {
+        arv->alt = maior(
+            altura(arv->esq),
+            altura(arv->dir)) + 1;
+    }
 
     return arv;
 }

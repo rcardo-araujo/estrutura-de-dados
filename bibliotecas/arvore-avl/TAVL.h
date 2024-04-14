@@ -10,5 +10,5 @@ TAVL* TAVL_cria(int x);
 TAVL* TAVL_insere(TAVL* arv, int x);
 TAVL* TAVL_retira(TAVL* arv, int x);
 TAVL* TAVL_busca(TAVL* arv, int x);
-void TAVL_imprime(TAVL* arv, int tab);
 TAVL* TAVL_libera(TAVL* arv);
+void TAVL_imprime(TAVL* arv, int tab);
