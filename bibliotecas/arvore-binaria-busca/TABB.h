@@ -13,6 +13,5 @@ TABB* TABB_insere(TABB* arv, int x);
 TABB* TABB_retira(TABB* arv, int x);
 TABB* TABB_busca(TABB* arv, int x);
 void TABB_imprime(TABB* arv, int tab);
-int TABB_folha(TABB* no);
 
 #endif

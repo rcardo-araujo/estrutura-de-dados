@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include "TABB.h"
 
+static int TABB_folha(TABB* no) {
+    return !(no->esq || no->dir);
+}
+
 TABB* TABB_inicializa(void) {
     return NULL;
 }
@@ -25,7 +29,32 @@ TABB* TABB_insere(TABB* arv, int x) {
 }
 
 TABB* TABB_retira(TABB* arv, int x) {
-    
+    if(!arv) return arv;
+
+    if(x != arv->info) {
+        if(x < arv->info) arv->esq = TABB_retira(arv->esq, x);
+        else arv->dir = TABB_retira(arv->dir, x);
+    } else {
+        if(TABB_folha(arv)) {
+            free(arv);
+            return NULL;
+        } else {
+            if(arv->esq && arv->dir) {
+                TABB* p = arv->esq;
+                while(p->dir) p = p->dir;
+                arv->info = p->info;
+                p->info = x;
+                arv->esq = TABB_retira(arv->esq, x); 
+            } else {
+                TABB* temp = arv;
+                if(arv->esq) arv = arv->esq;
+                else arv = arv->dir;
+                free(temp);
+            }
+        }
+    }
+
+    return arv;
 }
 
 TABB* TABB_busca(TABB* arv, int x) {
@@ -45,8 +74,4 @@ void TABB_imprime(TABB* arv, int tab) {
         TABB_imprime(arv->esq, tab + 3);
         TABB_imprime(arv->dir, tab + 3);
     } else printf(" NULL\n");
-}
-
-static int TABB_folha(TABB* no) {
-    return !(no->esq || no->dir);
 }
