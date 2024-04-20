@@ -27,6 +27,7 @@ int dVet(Aresta** vet, int x, int y, int tam) {
 } 
 
 // 02
+// Arestas sem orientação !!
 int na(TG* g) {
     if(!g) return 0;
 
