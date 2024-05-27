@@ -1,0 +1,2 @@
+• 1.0 - Dado um grafo conectado, verifique se ele pode ser transformado em uma árvore binária. Se ele pode ser uma árvore binária, retorne um. Se não, retorne zero. DICA: use TLSE para resolver esta questão: int teste (TG *g).
+• 2.0 - Dados um grafo, dois nós x e y, retorne um caminho qualquer entre x e y. Se não tiver caminho, o retorno é NULL: TLSE *caminho (TG *g, int x, int y).

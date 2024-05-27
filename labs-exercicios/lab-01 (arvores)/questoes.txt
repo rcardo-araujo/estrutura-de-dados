@@ -1,9 +1,9 @@
-1.0 Escrever uma função em C que, dada uma árvore binária qualquer, retorne, num vetor, todos os elementos maiores que N. A função deve ter o seguinte protótipo: int* mN(TAB*a, int N, int *tam);
+• 1.0 - Escrever uma função em C que, dada uma árvore binária qualquer, retorne, num vetor, todos os elementos maiores que N. A função deve ter o seguinte protótipo: int* mN(TAB*a, int N, int *tam);
 
-2.0 Testar se uma árvore é zigue-zague, isto é, todos os nós internos, exceto a raiz, possuem exatamente uma sub-árvore vazia - int zz(TAB *a);
+• 2.0 - Testar se uma árvore é zigue-zague, isto é, todos os nós internos, exceto a raiz, possuem exatamente uma sub-árvore vazia - int zz(TAB *a);
 
-3.0 Retornar todos os ancestrais de um nó na árvore de busca binária, da raiz da árvore até o elemento passado como parâmetro, usando a biblioteca de lista encadeada - TLSE* ancestrais(TABB *a, int elem);
+• 3.0 - Retornar todos os ancestrais de um nó na árvore de busca binária, da raiz da árvore até o elemento passado como parâmetro, usando a biblioteca de lista encadeada - TLSE* ancestrais(TABB *a, int elem);
 
-4.0 Verificar se uma árvore é estritamente binária, isto é, os nós dessa árvore possuem ou zero ou dois filhos - int estbin(TAB *a); e
+• 4.0 - Verificar se uma árvore é estritamente binária, isto é, os nós dessa árvore possuem ou zero ou dois filhos - int estbin(TAB *a); e
 
-5.0 Testar se duas árvores possuem as mesmas informações - int mi(TAB *a1, TAB *a2).
+• 5.0 - Testar se duas árvores possuem as mesmas informações - int mi(TAB *a1, TAB *a2).
