@@ -8,6 +8,7 @@ typedef struct lse{
 
 TLSE* TLSE_inicializa(void);
 TLSE* TLSE_insere(TLSE *l, int elem);
+TLSE* TLSE_insere_fim_rec(TLSE* l, int elem);
 void TLSE_imprime(TLSE *l);
 void TLSE_libera(TLSE *l);
 TLSE* TLSE_retira(TLSE *l, int elem);

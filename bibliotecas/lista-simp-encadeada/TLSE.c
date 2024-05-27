@@ -13,6 +13,12 @@ TLSE* TLSE_insere(TLSE *l, int elem){
   return novo;
 }
 
+TLSE* TLSE_insere_fim_rec(TLSE* l, int elem) {
+  if(!l) return TLSE_insere(l, elem);
+  l->prox = TLSE_insere_fim_rec(l->prox, elem);
+  return l;
+}
+
 void TLSE_imprime(TLSE *l){
   TLSE *p = l;
   while(p){
