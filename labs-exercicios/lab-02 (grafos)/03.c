@@ -3,37 +3,41 @@
 #include "..\..\bibliotecas\grafo\TG.h"
 #include "..\..\bibliotecas\lista-simp-encadeada\TLSE.h"
 
-TLSE* caminhoAux(TG* g, TG* v_atual, int obj, TLSE* cam) {
-    cam = TLSE_insere(cam, v_atual->info);
-    if(v_atual == obj) return cam;
-    TVIZ* p = v_atual->prim_viz;
-    while(p) {
-        if(p->info == obj) {
-            cam = TLSE_insere(cam, obj);
-            return cam;
+TLSE* caminhoAux(TG* g, TG* no, TLSE* path, TLSE** l_vis, int y) {
+    path = TLSE_insere_fim_rec(path, no->info);
+    if(no->info == y) return path;
+    *l_vis = TLSE_insere(*l_vis, no->info);
+
+    TVIZ* viz = no->prim_viz;
+    while(viz) {
+        if(!TLSE_busca(*l_vis, viz->info)) {
+            TG* no_viz = TG_busca_no(g, viz->info);
+            TLSE* path_aux = caminhoAux(g, no_viz, path, l_vis, y);
+            if(path_aux) return path_aux;
         }
-        if(!TLSE_busca(cam, p->info)) {
-            TG* aux = TG_busca_no(g, p->info);
-            TLSE* aux_cam = caminhoAux(g, aux, obj, cam);
-            if(aux_cam) return aux_cam;
-        }
-        p = p->prox_viz;
+
+        viz = viz->prox_viz;
     }
+
     return NULL;
 }
 
 TLSE* caminho(TG* g, int x, int y) {
     TG* no_x = TG_busca_no(g, x);
     if(!no_x) return NULL;
-    TVIZ* aux = no_x->prim_viz;
-    while(aux) {
-        TLSE* cam = TLSE_inicializa();
-        TG* aresta = TG_busca_no(g, aux->info);
-        cam = TLSE_insere(cam, no_x->info);
-        cam = caminhoAux(g, aresta, y, cam);
-        if(cam) return cam;
-        aux = aux->prox_viz;
+
+    TVIZ* viz = no_x->prim_viz;
+    TLSE* l_vis = TLSE_insere(NULL, no_x->info);
+    while(viz) {
+        TG* no_viz = TG_busca_no(g, viz->info);
+        TLSE* path = TLSE_insere(NULL, no_x->info);
+        path = caminhoAux(g, no_viz, path, &l_vis, y);
+        TLSE_imprime(path);
+        if(path) return path;
+
+        viz = viz->prox_viz;
     }
+
     return NULL;
 }
 

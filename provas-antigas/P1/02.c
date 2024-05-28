@@ -4,24 +4,31 @@
 #include "..\..\bibliotecas\grafo\TG.h"
 #include "..\..\bibliotecas\lista-simp-encadeada\TLSE.h"
 
-TLSE* caminho(TG* g, TG* no_atual, int obj, int* cam_tam, TLSE* cam) {
-    cam = TLSE_insere(cam, no_atual->info);
-    if(no_atual->info == obj) return cam;
-    (*cam_tam) ++;
+int tamCaminho(TLSE* path) {
+    int tam = 0;
+    TLSE* p = path;
+    while(p) {
+        tam ++;
+        p = p->prox;
+    }
+    return tam;
+}
 
-    TVIZ* viz = no_atual->prim_viz;
+TLSE* caminho(TG* g, TG* no, TLSE* path, int y) {
+    path = TLSE_insere_fim_rec(path, no->info);
+    if(no->info == y) return path;
+
+    TVIZ* viz = no->prim_viz;
     while(viz) {
-        if(viz->info == obj) {
-            cam = TLSE_insere(cam, obj);
-            return cam;
-        } 
-        if(!TLSE_busca(cam, viz->info)) {
-            TG* aux = TG_busca_no(g, viz->info);
-            TLSE* cam_aux = caminho(g, aux, obj, cam_tam, cam);
-            if(cam_aux) return cam_aux;
+        if(!TLSE_busca(path, viz->info)) {
+            TG* no_viz = TG_busca_no(g, viz->info);
+            TLSE* path_aux = caminho(g, no_viz, path, y);
+            if(path_aux) return path_aux;
         }
+        
         viz = viz->prox_viz;
     }
+
     return NULL;
 }
 
@@ -29,23 +36,27 @@ TLSE* menorCaminho(TG* g, int x, int y) {
     if(!g) return NULL;
 
     TG* no_x = TG_busca_no(g, x);
-    TVIZ* viz = no_x->prim_viz;
-    TLSE* menor_cam = TLSE_inicializa();
-    int menor_tam = INT_MAX;
-    while(viz) {
-        TG* v_viz = TG_busca_no(g, viz->info);
-        TLSE* cam_n = TLSE_inicializa();
-        int cam_tam = 0;
+    if(!no_x) return NULL;
 
-        cam_n = TLSE_insere(cam_n, no_x->info);
-        cam_n = caminho(g, v_viz, y, &cam_tam, cam_n);
-        if(cam_tam < menor_tam) {
-            menor_cam = cam_n;
-            menor_tam = cam_tam;
+    TLSE* menor_path = NULL;
+    int menor_tam = INT_MAX;
+
+    TVIZ* viz = no_x->prim_viz;
+    while(viz) {
+        TG* no_viz = TG_busca_no(g, viz->info);
+        TLSE* path = TLSE_insere(NULL, no_x->info);
+        path = caminho(g, no_viz, path, y);
+        
+        int tam = tamCaminho(path);
+        if(tam && (tam < menor_tam)) {
+            menor_path = path;
+            menor_tam = tam;
         }
+        
         viz = viz->prox_viz;
     }
-    return menor_cam;
+    
+    return menor_path;
 }
 
 int main(void) {
