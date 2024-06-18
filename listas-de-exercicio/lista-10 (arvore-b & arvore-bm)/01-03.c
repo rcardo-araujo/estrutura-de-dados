@@ -1,17 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 #include "..\..\bibliotecas\arvore-b\TARVB.h"
 
 // 01
-// int suc(TARVB* a, int elem) {
-//     TARVB* ch = TARVB_Busca(a, elem);
-//     if(!ch) return 0;
-
-//     int i;
-//     while((i < a->nchaves) && (a->chave[i] != elem)) i++;
-
-
-// }
+int suc(TARVB* a, int elem);
 
 // 02
 TARVB* maior(TARVB* a) {

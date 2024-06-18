@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "..\..\bibliotecas\arvore-b\TARVB.h"
+#include "..\..\bibliotecas\lista-simp-encadeada\TLSE.h"
 
 // 05
 TARVB* retira_pares(TARVB* a);

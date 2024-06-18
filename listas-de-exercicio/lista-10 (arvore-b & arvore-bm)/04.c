@@ -5,6 +5,22 @@
 int iguais(TARVB* a1, TARVB* a2) {
     if((!a1) && (!a2)) return 1;
     
+    if(a1 && a2) {
+        if(a1->folha != a2->folha) return 0;
+        if(a1->nchaves != a2->nchaves) return 0;
+
+        // Se chaves iguais
+        int i;
+        for(i = 0; i < a1->nchaves; i ++)
+            if(a1->chave[i] != a2->chave[i]) return 0;
+        
+        // Se filhos iguais
+        for(i = 0; i <= a1->nchaves; i ++) 
+            if(!iguais(a1->filho[i], a2->filho[i])) return 0;
+        
+        return 1;
+    }
+    return 0;
 }
 
 int main(void) {
